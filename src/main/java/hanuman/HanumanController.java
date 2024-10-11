@@ -5,12 +5,7 @@ import hanuman.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Optional;
-
 @RestController
-@RequestMapping("/hanuman")
 public class HanumanController {
 
     @Autowired
@@ -18,22 +13,24 @@ public class HanumanController {
 
     @RequestMapping("/")
     public String home() {
-        return "Jai Shree Ram, Jai Hanuman Ji Maharaj " +
-                LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+        return "Jai Shree Ram, Jai Hanuman Ji Maharaj " + java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
     }
 
-    // Insert username into the database
+    // Insert a new user
     @PostMapping("/insert")
     public String insertUsername(@RequestParam String username) {
-        User user = userService.saveUsername(username);
-        return "Username " + user.getUsername() + " has been saved!";
+        User savedUser = userService.saveUser(username);
+        return "User inserted: " + savedUser.getUsername();
     }
 
-    // Get username from the database
+    // Get a user by username
     @GetMapping("/get")
     public String getUsername(@RequestParam String username) {
-        Optional<User> user = userService.getUsername(username);
-        return user.map(u -> "Found username: " + u.getUsername())
-                .orElse("Username not found!");
+        User user = userService.getUserByUsername(username);
+        if (user != null) {
+            return "Found user: " + user.getUsername();
+        } else {
+            return "User not found.";
+        }
     }
 }

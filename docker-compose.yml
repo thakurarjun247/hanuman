@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  # PostgreSQL service
+  postgres:
+    image: postgres:13-alpine  # Lightweight PostgreSQL image
+    environment:
+      POSTGRES_USER: your_database_user     # Change to your desired user
+      POSTGRES_PASSWORD: your_password      # Change to your desired password
+      POSTGRES_DB: your_database_name       # Change to your desired database name
+    ports:
+      - "5432:5432"     # Expose the PostgreSQL port
+    volumes:
+      - postgres-data:/var/lib/postgresql
